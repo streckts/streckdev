@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 # Database configuration (replace with your actual database URI)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/database_name'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/database_name'
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
@@ -15,9 +15,7 @@ class User(db.Model):
 
 @app.route("/")
 def home():
-    return "Hello, World!"
+    return render_template('index.html')
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()  # Create database tables for our data models
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    app.run(debug=True)
