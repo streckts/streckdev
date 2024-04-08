@@ -2,7 +2,11 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+<<<<<<< HEAD
 # Database configuration (replace with your actual database URI)
+=======
+# Database configuration
+>>>>>>> 7bdc1ec5c75db1772c42815851b3119daab72cff
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/database_name'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
