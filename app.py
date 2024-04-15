@@ -1,10 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, session, jsonify
+from flask import Flask, render_template, redirect, url_for, session, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
-# Database configuration (replace with your actual database URI)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/database_name'
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -22,23 +22,40 @@ def home():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    # Dummy data for demonstration
-    users = {'user@example.com': 'hashed_password'}
-
-    # Get the data from the request
     data = request.get_json()
 
-    email = data.get('email')
-    password = data.get('password')
-    
-    # Replace the following line with the actual database check
-    if email in users and check_password_hash(users[email], password):
+    user = User.query.filter_by(email=data.get('email')).first()
+    if user and check_password_hash(user.password, data.get('password')):
         # Authentication successful
-        # Create token here if you're using JWT, etc.
         return jsonify({'message': 'Login successful'}), 200
     else:
         # Authentication failed
         return jsonify({'message': 'Invalid credentials'}), 401
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    
+    # Check if user already exists
+    existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+    if existing_user:
+        return jsonify({'message': 'User already exists'}), 409
+
+    # Hash the password
+    hashed_password = generate_password_hash(password, method='sha256')
+
+    # Create new user object
+    new_user = User(username=username, email=email, password=hashed_password)
+    
+    # Add to the database
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'User registered successfully'}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
