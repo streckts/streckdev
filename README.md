@@ -4,5 +4,5 @@ This is a web application intended to track assets from a variety of asset-types
 Technical Goals of project:
 - Learn Flask and React
 - Further understanding of Python API development
-- Further understanding of database management
+- Further understanding of Python database management
 - Practice front-end / back-end integration
