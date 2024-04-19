@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     # Initialize database w/ SQLite
     with app.app_context():
-    db.create_all()
+        db.create_all()
 
     # Run site
     app.run(debug=True)
