@@ -17,21 +17,26 @@ class User(db.Model):
 
 @app.route("/")
 def home():
-    if 'logged_in' not in session:
-        return redirect(url_for('login'))  # Assumes you have a 'login' route defined
+    #if 'logged_in' not in session:
+    #    return redirect(url_for('login'))  # Assumes you have a 'login' route defined
     return render_template('index.html')
 
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 def login():
-    data = request.get_json()
+    if request.method == 'POST':
+        # Handle login attempt
+            data = request.get_json()
 
-    user = User.query.filter_by(email=data.get('email')).first()
-    if user and check_password_hash(user.password, data.get('password')):
-        # Authentication successful
-        return jsonify({'message': 'Login successful'}), 200
-    else:
-        # Authentication failed
-        return jsonify({'message': 'Invalid credentials'}), 401
+            user = User.query.filter_by(email=data.get('email')).first()
+            if user and check_password_hash(user.password, data.get('password')):
+            # Authentication successful
+                return jsonify({'message': 'Login successful'}), 200
+            else:
+            # Authentication failed
+                return jsonify({'message': 'Invalid credentials'}), 401
+    elif request.method == 'GET':
+        # Maybe return a login page or information
+        pass
 
 @app.route('/api/register', methods=['POST'])
 def register():
