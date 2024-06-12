@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--CSS link-->
-    <title>{% block title %}Portfolio Tracker{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streck</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
-        <!-- Header content-->
-        {% block header %}{% endblock %}
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('projects')}}">Projects</a>
+            </ul>
+        </nav>
     </header>
-
-    <nav>
-        <!-- Nav bar -->
-        {% block nav %}{% endblock %}
-    </nav>
-
     <main>
         {% block content %}{% endblock %}
     </main>
-
-    <footer>
-        <!-- Footer -->
-        {% block footer %}{% endblock %}
-    </footer>
-
-    <!-- JS -->
-    {% block scripts %}{% endblock %}
 </body>
 </html>
