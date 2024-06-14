@@ -15,9 +15,13 @@ def home():
     #    return redirect(url_for('login'))  # Assumes you have a 'login' route defined
     return render_template('home.html')
 
-@app.route("/projects")
-def projects():
-    return render_template('projects.html')
+@app.route("/azure")
+def azure():
+    return render_template('azure.html')
+
+@app.route("/portfoliotracker")
+def portfoliotracker():
+    return render_template('portfoliotracker.html')
 
 if __name__ == "__main__":
 
