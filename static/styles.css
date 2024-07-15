@@ -79,3 +79,46 @@ footer p {
     margin: 0;
     font-size: 14px;
 }
+
+.vertical-accordion {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.vertical-accordion-item {
+    border-bottom: 1px solid #ccc;
+}
+
+.vertical-accordion-title {
+    padding: 10px;
+    background: #f1f1f1;
+    cursor: pointer;
+}
+
+.vertical-accordion-content {
+    display: none;  /* Initially hidden */
+    padding: 10px;
+    background: #fff;
+}
+
+.tool {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.HTML { background-color: #e34c26; }
+.CSS { background-color: #264de4; }
+.JavaScript { background-color: #f7df1e; color: #000; }
+.Python { background-color: #306998; }
+.React { background-color: #61dafb; color: #000; }
+.Django { background-color: #092e20; }
+
