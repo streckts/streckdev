@@ -62,7 +62,7 @@ header {
 }
 
 main {
-    padding: 20px;
+    padding: 10px;
 }
 
 footer {
@@ -70,9 +70,10 @@ footer {
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    position: absolute;
+    position: fixed;
     width: 100%;
     bottom: 0;
+    display: flex;
 }
 
 footer p {
@@ -84,7 +85,7 @@ footer p {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 100px;
 }
 
 .vertical-accordion-item {
@@ -121,4 +122,5 @@ footer p {
 .Python { background-color: #306998; }
 .React { background-color: #61dafb; color: #000; }
 .Django { background-color: #092e20; }
+.cpp { background-color: #005eff; }
 
