@@ -17,6 +17,13 @@
                     <li><a href="{{ url_for('azure') }}">Azure</a></li>
                     <li><a href="{{ url_for('portfoliotracker') }}">Portfolio Tracker</a></li>
                 </ul>
+                <ul class="auth-links">
+                    {% if current_user.is_authenticated %}
+                        <li>{{ current_user.username }}/li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
             </div>
         </nav>
     </header>
@@ -28,11 +35,8 @@
             <p>&copy; 2024 Streck. All rights reserved.</p>
         </div>
     </footer>
-</body>
-<body>
     {% block scripts %}
         <script src="{{ url_for('static', filename='main.js') }}"></script>
     {% endblock %}
 </body>
 </html>
-

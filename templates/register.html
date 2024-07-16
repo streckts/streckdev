@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Streck{% endblock %}
+
+{% block header %}
+<header>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo">Streck</a>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
+{% block content %}
+    <main class="container">
+        <h1>Signup</h1>
+        <form method="POST">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" name="email" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit">Signup</button>
+        </form>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Streck. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+{% endblock %}

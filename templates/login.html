@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Streck{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<body>
+    <h1>Login</h1>
+    <form method="POST">
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+{% endblock %}
