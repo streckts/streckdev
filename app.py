@@ -54,6 +54,16 @@ def signup():
         return redirect(url_for('login'))
     return render_template('signup.html')
 
+@app.route('/logout', methods=['GET','POST'])
+def logout():
+    if request.method == 'POST':
+        logout_user()
+        return redirect(url_for('login'))
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
 @app.route("/azure")
 def azure():
     return render_template('azure.html')

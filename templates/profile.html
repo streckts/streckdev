@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Streck{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<body>
+    <h1>Welcome, {{ current_user.username }}!</h1>
+    
+    <form action="{{ url_for('logout') }}" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+{% endblock %}
