@@ -16,8 +16,6 @@
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     <li><a href="{{ url_for('azure') }}">Azure</a></li>
                     <li><a href="{{ url_for('portfoliotracker') }}">Portfolio Tracker</a></li>
-                </ul>
-                <ul class="auth-links">
                     {% if current_user.is_authenticated %}
                         <li>{{ current_user.username }}/li>
                     {% else %}

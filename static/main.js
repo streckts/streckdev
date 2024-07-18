@@ -14,3 +14,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         tool.classList.add(toolName);
     });
 });
+
+document.getElementById('btnregister').onclick = function() {
+    window.location.href = '/signup';
+};
