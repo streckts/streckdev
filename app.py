@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from portfolio_tracker import portfolio_tracker
 
 from models import db, User
 
@@ -68,9 +69,7 @@ def profile():
 def azure():
     return render_template('azure.html')
 
-@app.route("/portfoliotracker")
-def portfoliotracker():
-    return render_template('portfoliotracker.html')
+app.register_blueprint(portfolio_tracker)
 
 if __name__ == "__main__":
 

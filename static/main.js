@@ -1,5 +1,6 @@
 // static/main.js
 
+// Dropdown home page
 document.addEventListener('DOMContentLoaded', (event) => {
     const acc = document.querySelectorAll('.vertical-accordion-title');
     acc.forEach(title => {
@@ -15,6 +16,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+// Buttons
 document.getElementById('btnregister').onclick = function() {
     window.location.href = '/signup';
 };
+
+document.getElementById('btnlogin').onclick = function() {
+    window.location.href = '/login';
+}
+
+document.getElementById('btnPTdemo').onclick = function() {
+    window.location.href = '/'; // change once implemented
+}
