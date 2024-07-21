@@ -8,9 +8,52 @@
 
 {% block content %}
     <h1>Portfolio Tracker</h1>
-    <p>Current bitcoin price: ${{ btc_price }}</p>
-    <p>Current AAPL price: ${{ aapl_price }}</p>
     <body>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAssetModalLabel">Add Asset</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addAssetForm" method="POST" action="{{ url_for('portfolio_tracker.add_asset') }}">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticker">Ticker</label>
+                                <input type="text" class="form-control" id="ticker" name="ticker" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Type</label>
+                                <select class="form-control" id="type" name="type" required>
+                                    <option value="stock">Stock</option>
+                                    <option value="crypto">Crypto</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Asset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
+    <h2>Your Assets</h2>
+    <ul>
+        {% for asset in assets %}
+            <li>{{ asset.name }} ({{ asset.ticker }}) - {{ asset.type }} - ${{ asset.price }} x {{ asset.quantity }}</li>
+        {% endfor %}
+    </ul>
     <!-- home -->
 {% endblock %}

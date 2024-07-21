@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from portfolio_tracker import portfolio_tracker
 
-from models import db, User
+from models import db, User, Asset, UserAsset
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
