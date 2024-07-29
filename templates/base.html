@@ -9,23 +9,34 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <a href="{{ url_for('home') }}" class="logo">Streck</a>
-                <ul class="nav-links">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('azure') }}">Azure</a></li>
-                    <li><a href="{{ url_for('portfolio_tracker.portfoliotracker') }}">Portfolio Tracker</a></li>
+    <header class="header">
+        <div class="container text-center py-3">
+            <a href="{{ url_for('home') }}" class="logo">Streck</a>
+        </div>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto nav-links">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('azure') }}">Azure</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('portfolio_tracker.portfoliotracker') }}">Portfolio Tracker</a></li>
+                </ul>
+                <ul class="navbar-nav ml-auto auth-links">
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('profile') }}">{{ current_user.username }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">{{ current_user.username }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
-                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('signup') }}">Register</a></li>
                     {% endif %}
                 </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
     <main class="container">
         {% block content %}{% endblock %}
     </main>
