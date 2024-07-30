@@ -41,14 +41,15 @@ body {
 }
 
 .nav-links a {
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
     font-size: 16px;
     transition: color 0.3s;
+    font-weight: bold;
 }
 
 .nav-links a:hover {
-    color: #aed581;
+    color: #aed581 !important;
 }
 
 .auth-links {
@@ -63,10 +64,11 @@ body {
 }
 
 .auth-links a {
-    color: rgb(119, 139, 252);
+    color: rgb(119, 139, 252) !important;
     text-decoration: none;
     font-size: 16px;
     transition: color 0.3s;
+    font-weight: bold;
 }
 
 .container {
