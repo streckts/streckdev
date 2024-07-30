@@ -51,8 +51,8 @@
     </body>
     <h2>Your Assets</h2>
     <ul>
-        {% for asset in assets %}
-            <li>{{ asset.name }} ({{ asset.ticker }}) - {{ asset.type }} - ${{ asset.price }} x {{ asset.quantity }}</li>
+        {% for user_assets in user_assets %}
+            <li>{{ user_assets.asset.name }} ({{ user_assets.asset.ticker }}) - {{ user_assets.asset.type }} - ${{ user_assets.asset.price }} x {{ user_assets.quantity }}</li>
         {% endfor %}
     </ul>
     <!-- home -->
