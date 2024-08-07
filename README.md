@@ -1,8 +1,8 @@
-# portfolio-tracker
-This is a web application intended to track assets from a variety of asset-types such as stocks, crypto, metals, etc.. The project goal is to provide a seamless interface where a user can see the value of all their assets pooled in one place rather across different platforms. 
+# streckdev
+This is a personal portfolio website as well as a testing grounds for projects. The primary technical objectives of the project are listed below.
 
 Technical Goals of project:
-- Learn Flask and React
-- Further understanding of Python API development
-- Further understanding of Python database management
-- Practice front-end / back-end integration
+- Build entire front-end and back-end for an interactive website offering numerous services
+- Deploy Azure AI solutions on a live website
+- Build an application for tracking a multi-platform portfolio, with advanced visualization and insight tools (possibly package this as a seperate software project at some point).
+- Showcase some work in a creative way
