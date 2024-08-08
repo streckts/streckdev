@@ -47,12 +47,25 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
+        
+        # Check if email already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email already exists. Please choose a different one.', 'danger')
+            return redirect(url_for('signup'))
+        
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = User(username=username, email=email, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Your account has been created! You can now log in', 'success')
-        return redirect(url_for('login'))
+        
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Your account has been created! You can now log in', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while creating your account. Please try again.', 'danger')
+    
     return render_template('signup.html')
 
 @app.route('/logout', methods=['GET','POST'])
