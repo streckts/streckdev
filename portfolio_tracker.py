@@ -21,19 +21,27 @@ def get_crypto_prices(tickers):
 
 def get_stock_prices(ticker):
     FINNHUB_API_KEY = os.getenv('FINNHUB_API_KEY')
-    for ticker in ticker:
-        url = f'https://finnhub.io/api/v1/quote?symbol={ticker}&token={FINNHUB_API_KEY}'
-        response = requests.get(url)
-        data = response.json()
-        price = data['c']  # 'c' is the current price
+    url = f'https://finnhub.io/api/v1/quote?symbol={ticker}&token={FINNHUB_API_KEY}'
+    response = requests.get(url)
+    data = response.json()
+    price = data['c']  # 'c' is the current price
     return price
+    
+def generate_acc_stats(user_assets):
+    networth = 0
+    for user_asset in user_assets:
+        networth += user_asset.asset.price * user_asset.quantity
+    return round(networth, 2)
+
+# Routes
 
 @portfolio_tracker.route('/portfoliotracker')
 @login_required
 def portfoliotracker():
     if current_user.is_authenticated:
         user_assets = UserAsset.query.filter_by(user_id=current_user.id).all()
-        return render_template('portfoliotracker.html', user_assets=user_assets)
+        networth = generate_acc_stats(user_assets)
+        return render_template('portfoliotracker.html', user_assets=user_assets,networth=networth)
     else:
         return render_template('PTdemo_prompt.html')
 

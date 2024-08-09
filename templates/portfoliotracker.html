@@ -40,7 +40,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Quantity</label>
-                                <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" required>
+                                <input type="number" step="0.0001" class="form-control" id="quantity" name="quantity" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Add Asset</button>
                         </form>
@@ -54,6 +54,10 @@
         {% for user_assets in user_assets %}
             <li>{{ user_assets.asset.name }} ({{ user_assets.asset.ticker }}) - {{ user_assets.asset.type }} - ${{ user_assets.asset.price }} x {{ user_assets.quantity }}</li>
         {% endfor %}
+    </ul>
+    <h3>Total Networth</h3>
+    <ul>
+        ${{ networth }}
     </ul>
     <!-- home -->
 {% endblock %}
