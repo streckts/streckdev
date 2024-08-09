@@ -10,12 +10,14 @@ load_dotenv()
 
 portfolio_tracker = Blueprint('portfolio_tracker', __name__)
 
-def get_crypto_prices(tickers):
-    ids = ','.join(tickers)
-    url = f'https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies=usd'
+apiIDs = {'the graph':'the-graph', 'fetch.ai':'fetch-ai'}
+
+def get_crypto_prices(name):
+    url = f'https://api.coingecko.com/api/v3/simple/price?ids={name}&vs_currencies=usd'
     response = requests.get(url)
     data = response.json()
-    prices = {ticker: data[ticker]['usd'] for ticker in tickers}
+    prices = data[name]['usd']
+    print(name)
     return prices
 
 
@@ -58,7 +60,7 @@ def add_asset():
     asset = Asset.query.filter_by(ticker=ticker).first()
     if not asset:
         # Fetch asset price
-        price = get_crypto_prices(ticker) if asset_type.lower() == 'crypto' else get_stock_prices(ticker)
+        price = get_crypto_prices(apiIDs.get(name.lower(), name.lower())) if asset_type.lower() == 'crypto' else get_stock_prices(ticker)
         if price is None:
             flash('Failed to fetch asset price. Please check the ticker symbol and try again.', 'danger')
             return redirect(url_for('portfolio_tracker.portfoliotracker'))
