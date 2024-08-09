@@ -19,42 +19,20 @@ def get_crypto_prices(tickers):
     return prices
 
 
-def get_stock_prices(tickers):
+def get_stock_prices(ticker):
     FINNHUB_API_KEY = os.getenv('FINNHUB_API_KEY')
-    prices = {}
-    for ticker in tickers:
+    for ticker in ticker:
         url = f'https://finnhub.io/api/v1/quote?symbol={ticker}&token={FINNHUB_API_KEY}'
         response = requests.get(url)
         data = response.json()
-        prices[ticker] = data['c']  # 'c' is the current price
-    return prices
+        price = data['c']  # 'c' is the current price
+    return price
 
 @portfolio_tracker.route('/portfoliotracker')
 @login_required
 def portfoliotracker():
     if current_user.is_authenticated:
         user_assets = UserAsset.query.filter_by(user_id=current_user.id).all()
-
-        # Separate tickers by type
-        crypto_tickers = [asset.asset.ticker for asset in user_assets if asset.asset.type.lower() == 'crypto']
-        stock_tickers = [asset.asset.ticker for asset in user_assets if asset.asset.type.lower() == 'stock']
-
-        # Fetch prices in batch
-        crypto_prices = get_crypto_prices(crypto_tickers) if crypto_tickers else {}
-        stock_prices = get_stock_prices(stock_tickers) if stock_tickers else {}
-
-        # Update prices in the database
-        for user_asset in user_assets:
-            asset = user_asset.asset
-            if asset.type.lower() == 'crypto':
-                new_price = crypto_prices.get(asset.ticker)
-            else:
-                new_price = stock_prices.get(asset.ticker)
-
-            if new_price is not None:
-                asset.price = new_price
-                db.session.commit()
-
         return render_template('portfoliotracker.html', user_assets=user_assets)
     else:
         return render_template('PTdemo_prompt.html')
