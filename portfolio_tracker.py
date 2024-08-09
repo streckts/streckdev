@@ -81,3 +81,18 @@ def add_asset():
     db.session.commit()
     flash('Asset added successfully!', 'success')
     return redirect(url_for('portfolio_tracker.portfoliotracker'))
+
+@portfolio_tracker.route('/remove_asset', methods=['POST'])
+@login_required
+def remove_asset():
+    asset_id = request.form['asset_id']  # Get the asset ID from the form
+    user_asset = UserAsset.query.filter_by(user_id=current_user.id, asset_id=asset_id).first()
+
+    if user_asset:
+        db.session.delete(user_asset)
+        db.session.commit()
+        flash('Asset removed successfully!', 'success')
+    else:
+        flash('Asset not found or does not belong to you.', 'danger')
+
+    return redirect(url_for('portfolio_tracker.portfoliotracker'))
