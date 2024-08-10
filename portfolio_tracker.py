@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 import requests
 import os
 from dotenv import load_dotenv
+import logging
 
 from models import db, User, Asset, UserAsset
 
@@ -12,22 +13,75 @@ portfolio_tracker = Blueprint('portfolio_tracker', __name__)
 
 apiIDs = {'the graph':'the-graph', 'fetch.ai':'fetch-ai'}
 
-def get_crypto_prices(name):
-    url = f'https://api.coingecko.com/api/v3/simple/price?ids={name}&vs_currencies=usd'
-    response = requests.get(url)
-    data = response.json()
-    prices = data[name]['usd']
-    print(name)
-    return prices
+def get_crypto_prices(tickers):
+    # Join the tickers into a comma-separated string
+    ids = ','.join(tickers)
+    url = f'https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies=usd'
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx and 5xx)
+        data = response.json()
+
+        # Create a dictionary of prices where the key is the ticker and the value is the price
+        prices = {ticker: data.get(ticker, {}).get('usd', None) for ticker in tickers}
+        return prices
+
+    except requests.exceptions.HTTPError as http_err:
+        logging.error(f"HTTP error occurred: {http_err}")
+    except requests.exceptions.RequestException as req_err:
+        logging.error(f"Request error occurred: {req_err}")
+    except ValueError as val_err:
+        logging.error(f"JSON decoding error: {val_err}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
+
+    return {}
 
 
 def get_stock_prices(ticker):
     FINNHUB_API_KEY = os.getenv('FINNHUB_API_KEY')
     url = f'https://finnhub.io/api/v1/quote?symbol={ticker}&token={FINNHUB_API_KEY}'
-    response = requests.get(url)
-    data = response.json()
+        
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+        data = response.json()
+    except requests.exceptions.HTTPError as http_err:
+        logging.error(f"HTTP error occurred for {ticker}: {http_err}")
+    except requests.exceptions.RequestException as req_err:
+        logging.error(f"Request error occurred for {ticker}: {req_err}")
+    except ValueError:
+        logging.error(f"Error decoding JSON response for {ticker}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred for {ticker}: {e}")
+
     price = data['c']  # 'c' is the current price
     return price
+
+
+def refresh_quotes(user_assets):
+    crypto_tickers = [ua.asset.ticker for ua in user_assets if ua.asset.type == 'crypto']
+    stock_tickers = [ua.asset.ticker for ua in user_assets if ua.asset.type == 'stock']
+
+    #Fetch prices in bulk
+    crypto_prices = get_crypto_prices(crypto_tickers) if crypto_tickers else {}
+    stock_prices = {ticker: get_stock_prices(ticker) for ticker in stock_tickers} if stock_tickers else {}
+
+    #Update all UserAssets in memory
+    for user_asset in user_assets:
+        if user_asset.asset.type == 'crypto':
+            new_price = crypto_prices.get(user_asset.asset.ticker)
+        elif user_asset.asset.type == 'stock':
+            new_price = stock_prices.get(user_asset.asset.ticker)
+        else:
+            continue  # Skip unknown asset types
+
+        if new_price is not None:
+            user_asset.asset.price = new_price
+
+    #Commit changes
+    db.session.commit()
     
 def generate_acc_stats(user_assets):
     networth = 0
@@ -42,6 +96,7 @@ def generate_acc_stats(user_assets):
 def portfoliotracker():
     if current_user.is_authenticated:
         user_assets = UserAsset.query.filter_by(user_id=current_user.id).all()
+        refresh_quotes(user_assets)
         networth = generate_acc_stats(user_assets)
         return render_template('portfoliotracker.html', user_assets=user_assets,networth=networth)
     else:
@@ -60,13 +115,13 @@ def add_asset():
     asset = Asset.query.filter_by(ticker=ticker).first()
     if not asset:
         # Fetch asset price
-        price = get_crypto_prices(apiIDs.get(name.lower(), name.lower())) if asset_type.lower() == 'crypto' else get_stock_prices(ticker)
+        price = get_crypto_prices(list(apiIDs.get(name.lower(), name.lower()))) if asset_type.lower() == 'crypto' else get_stock_prices(list(ticker))
         if price is None:
             flash('Failed to fetch asset price. Please check the ticker symbol and try again.', 'danger')
             return redirect(url_for('portfolio_tracker.portfoliotracker'))
 
         # Create new asset
-        asset = Asset(name=name, ticker=ticker, type=asset_type, price=price)
+        asset = Asset(name=name, ticker=ticker, type=asset_type, price=price.get(ticker))
         db.session.add(asset)
         db.session.commit()
 
