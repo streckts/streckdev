@@ -113,7 +113,7 @@ def add_asset():
     price = request.form.get('price', type=float) if asset_type.lower() == 'custom' else None
 
     # Check if asset already exists
-    asset = Asset.query.filter_by(ticker=ticker).first()
+    asset = Asset.query.filter_by(name=name).first()
     if not asset:
         if asset_type.lower() == 'custom':
             # Create a new custom asset with the user-provided price
