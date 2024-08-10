@@ -86,10 +86,9 @@ footer {
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    position: fixed;
     width: 100%;
+    position: relative;  /* Changed from fixed to relative */
     bottom: 0;
-    display: flex;
 }
 
 footer p {
