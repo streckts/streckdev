@@ -110,18 +110,23 @@ def add_asset():
     ticker = request.form['ticker']
     asset_type = request.form['type']
     quantity = float(request.form['quantity'])
+    price = request.form.get('price', type=float) if asset_type.lower() == 'custom' else None
 
     # Check if asset already exists
     asset = Asset.query.filter_by(ticker=ticker).first()
     if not asset:
-        # Fetch asset price
-        price = get_crypto_prices(list(apiIDs.get(name.lower(), name.lower()))) if asset_type.lower() == 'crypto' else get_stock_prices(list(ticker))
-        if price is None:
-            flash('Failed to fetch asset price. Please check the ticker symbol and try again.', 'danger')
-            return redirect(url_for('portfolio_tracker.portfoliotracker'))
+        if asset_type.lower() == 'custom':
+            # Create a new custom asset with the user-provided price
+            asset = Asset(name=name, ticker=ticker, type='custom', price=price)
+        else:
+            # Fetch asset price from the appropriate API
+            price = get_crypto_prices(apiIDs.get(name.lower(), name.lower())) if asset_type.lower() == 'crypto' else get_stock_prices(ticker)
+            if price is None:
+                flash('Failed to fetch asset price. Please check the ticker symbol and try again.', 'danger')
+                return redirect(url_for('portfolio_tracker.portfoliotracker'))
 
-        # Create new asset
-        asset = Asset(name=name, ticker=ticker, type=asset_type, price=price.get(ticker))
+            asset = Asset(name=name, ticker=ticker, type=asset_type, price=price)
+
         db.session.add(asset)
         db.session.commit()
 

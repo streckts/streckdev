@@ -17,14 +17,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 // Buttons
-document.getElementById('btnregister').onclick = function() {
-    window.location.href = '/signup';
-};
 
-document.getElementById('btnlogin').onclick = function() {
-    window.location.href = '/login';
-}
 
-document.getElementById('btnPTdemo').onclick = function() {
-    window.location.href = '/'; // change once implemented
-}
+//document.getElementById('btnregister').onclick = function() {
+//    window.location.href = '/signup';
+//};
+
+//document.getElementById('btnlogin').onclick = function() {
+//    window.location.href = '/login';
+//}
+
+//document.getElementById('btnPTdemo').onclick = function() {
+//    window.location.href = '/'; // change once implemented
+//}
+
+document.getElementById('type').addEventListener('change', function() {
+    const priceField = document.getElementById('custom-price-field');
+    console.log('Type changed to:', this.value); // Debugging line
+
+    if (this.value === 'custom') {
+        priceField.style.display = 'block';
+    } else {
+        priceField.style.display = 'none';
+    }
+});
