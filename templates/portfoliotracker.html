@@ -8,72 +8,111 @@
 
 {% block content %}
     <h1>Portfolio Tracker</h1>
-    <body>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
-        
-        <!-- Modal -->
-        <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addAssetModalLabel">Add Asset</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ url_for('portfolio_tracker.add_asset') }}" method="POST">
-                            <div class="form-group">
-                                <label for="name">Asset Name:</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="ticker">Ticker:</label>
-                                <input type="text" class="form-control" id="ticker" name="ticker" required>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="type">Type:</label>
-                                <select id="type" name="type" class="form-control" required>
-                                    <option value="crypto">Crypto</option>
-                                    <option value="stock">Stock</option>
-                                    <option value="custom">Custom</option>
-                                </select>
-                            </div>
-        
-                            <div id="custom-price-field" class="form-group" style="display:none;">
-                                <label for="price">Price:</label>
-                                <input type="number" class="form-control" id="price" name="price" step="0.01">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="quantity">Quantity:</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" step="0.01" required>
-                            </div>
-        
-                            <button type="submit" class="btn btn-primary">Add Asset</button>
-                        </form>
-                    </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAssetModal">Add Asset</button>
+
+    <!-- Modal for Adding Asset -->
+    <div class="modal fade" id="addAssetModal" tabindex="-1" role="dialog" aria-labelledby="addAssetModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAssetModalLabel">Add Asset</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('portfolio_tracker.add_asset') }}" method="POST">
+                        <div class="form-group">
+                            <label for="name">Asset Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ticker">Ticker:</label>
+                            <input type="text" class="form-control" id="ticker" name="ticker" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type:</label>
+                            <select id="type" name="type" class="form-control" required>
+                                <option value="crypto">Crypto</option>
+                                <option value="stock">Stock</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div id="custom-price-field" class="form-group" style="display:none;">
+                            <label for="price">Price:</label>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" step="0.01" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Asset</button>
+                    </form>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+
     <h2>Your Assets</h2>
     <ul>
         {% for user_asset in user_assets %}
+            <!-- Modal for Updating Asset -->
+            <div class="modal fade" id="updateAssetModal{{ user_asset.asset.id }}" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel{{ user_asset.asset.id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateAssetModalLabel{{ user_asset.asset.id }}">Update Asset</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ url_for('portfolio_tracker.update_asset') }}" method="POST">
+                                <input type="hidden" name="asset_id" value="{{ user_asset.asset.id }}">
+                                <div class="form-group">
+                                    <label for="name{{ user_asset.asset.id }}">Asset Name:</label>
+                                    <input type="text" class="form-control" id="name{{ user_asset.asset.id }}" name="name" value="{{ user_asset.asset.name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ticker{{ user_asset.asset.id }}">Ticker:</label>
+                                    <input type="text" class="form-control" id="ticker{{ user_asset.asset.id }}" name="ticker" value="{{ user_asset.asset.ticker }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="type{{ user_asset.asset.id }}">Type:</label>
+                                    <select id="type{{ user_asset.asset.id }}" name="type" class="form-control" required>
+                                        <option value="crypto" {% if user_asset.asset.type == 'crypto' %}selected{% endif %}>Crypto</option>
+                                        <option value="stock" {% if user_asset.asset.type == 'stock' %}selected{% endif %}>Stock</option>
+                                        <option value="custom" {% if user_asset.asset.type == 'custom' %}selected{% endif %}>Custom</option>
+                                    </select>
+                                </div>
+                                <div id="custom-price-field{{ user_asset.asset.id }}" class="form-group" {% if user_asset.asset.type != 'custom' %}style="display:none;"{% endif %}>
+                                    <label for="price{{ user_asset.asset.id }}">Price:</label>
+                                    <input type="number" class="form-control" id="price{{ user_asset.asset.id }}" name="price" step="0.01" value="{{ user_asset.asset.price }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity{{ user_asset.asset.id }}">Quantity:</label>
+                                    <input type="number" class="form-control" id="quantity{{ user_asset.asset.id }}" name="quantity" step="0.01" value="{{ user_asset.quantity }}" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Asset</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <li>
                 {{ user_asset.asset.name }} ({{ user_asset.asset.ticker }}) - {{ user_asset.asset.type }} - ${{ user_asset.asset.price }} x {{ user_asset.quantity }}
                 <form action="{{ url_for('portfolio_tracker.remove_asset') }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this asset?');">
                     <input type="hidden" name="asset_id" value="{{ user_asset.asset.id }}">
-                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                 </form>
+                <!-- Update Asset Button -->
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateAssetModal{{ user_asset.asset.id }}">Update</button>
             </li>
         {% endfor %}
     </ul>
+
     <h3>Total Networth</h3>
     <ul>
         ${{ networth }}
     </ul>
-    <!-- home -->
 {% endblock %}

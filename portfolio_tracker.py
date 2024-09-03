@@ -144,6 +144,42 @@ def add_asset():
     flash('Asset added successfully!', 'success')
     return redirect(url_for('portfolio_tracker.portfoliotracker'))
 
+@portfolio_tracker.route('/update_asset', methods=['POST'])
+@login_required
+def update_asset():
+    # Retrieve form data
+    name = request.form['name']
+    ticker = request.form['ticker']
+    quantity = request.form['quantity']
+    price = request.form['price']
+    asset_type = request.form['type']
+
+    # Find the asset by ticker and type
+    asset = Asset.query.filter_by(name=name, ticker=ticker, type=asset_type).first()
+
+    if asset:
+        # Update asset's price and type
+        asset.price = price
+        asset.type = asset_type
+
+        # Find the UserAsset by user_id and asset_id
+        user_asset = UserAsset.query.filter_by(user_id=current_user.id, asset_id=asset.id).first()
+
+        if user_asset:
+            # Update the quantity of the asset
+            user_asset.quantity = quantity
+
+            # Commit the changes to the database
+            db.session.commit()
+
+            flash('Asset updated successfully!', 'success')
+        else:
+            flash('User asset not found.', 'danger')
+    else:
+        flash('Asset not found.', 'danger')
+
+    return redirect(url_for('portfolio_tracker.portfoliotracker'))
+
 @portfolio_tracker.route('/remove_asset', methods=['POST'])
 @login_required
 def remove_asset():

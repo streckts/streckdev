@@ -64,7 +64,7 @@ body {
 }
 
 .auth-links a {
-    color: rgb(119, 139, 252) !important;
+    color: rgb(22, 190, 86) !important;
     text-decoration: none;
     font-size: 16px;
     transition: color 0.3s;
@@ -129,6 +129,14 @@ footer p {
     color: #fff;
     text-align: center;
     text-transform: uppercase;
+}
+
+.remove-asset-button {
+    color:#e34c26
+    padding: 2px 6px;
+    font-size: 6px;
+    line-height: 1;
+    border-radius: 0px;
 }
 
 .HTML { background-color: #e34c26; }
