@@ -56,6 +56,26 @@
     <h2>Your Assets</h2>
     <ul>
         {% for user_asset in user_assets %}
+            <div class="row">
+                <!-- Asset name and price column -->
+                <div class="col">
+                    {{ user_asset.asset.name }} ({{ user_asset.asset.ticker }}) - {{ user_asset.asset.type }} - ${{ user_asset.asset.price }} x {{ user_asset.quantity }}
+                </div>
+
+                <!-- Update button column -->
+                <div class="col-auto d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateAssetModal{{ user_asset.asset.id }}">Update</button>
+                </div>
+
+                <!-- Remove button column -->
+                <div class="col-auto d-flex justify-content-end">
+                    <form action="{{ url_for('portfolio_tracker.remove_asset') }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this asset?');">
+                        <input type="hidden" name="asset_id" value="{{ user_asset.asset.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </div>
+            </div>
+
             <!-- Modal for Updating Asset -->
             <div class="modal fade" id="updateAssetModal{{ user_asset.asset.id }}" tabindex="-1" role="dialog" aria-labelledby="updateAssetModalLabel{{ user_asset.asset.id }}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -99,15 +119,6 @@
                     </div>
                 </div>
             </div>
-            <li>
-                {{ user_asset.asset.name }} ({{ user_asset.asset.ticker }}) - {{ user_asset.asset.type }} - ${{ user_asset.asset.price }} x {{ user_asset.quantity }}
-                <form action="{{ url_for('portfolio_tracker.remove_asset') }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this asset?');">
-                    <input type="hidden" name="asset_id" value="{{ user_asset.asset.id }}">
-                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                </form>
-                <!-- Update Asset Button -->
-                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateAssetModal{{ user_asset.asset.id }}">Update</button>
-            </li>
         {% endfor %}
     </ul>
 
