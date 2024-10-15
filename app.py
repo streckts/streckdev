@@ -3,7 +3,9 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
-from portfolio_tracker import portfolio_tracker
+
+from portfolio_tracker import portfolio_tracker_bp
+from azure_demos import azure_demos_bp
 
 from models import db, User, Asset, UserAsset
 
@@ -78,11 +80,8 @@ def logout():
 def profile():
     return render_template('profile.html')
 
-@app.route("/azure")
-def azure():
-    return render_template('azure.html')
-
-app.register_blueprint(portfolio_tracker)
+app.register_blueprint(portfolio_tracker_bp)
+app.register_blueprint(azure_demos_bp)
 
 if __name__ == "__main__":
 

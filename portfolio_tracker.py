@@ -9,7 +9,7 @@ from models import db, User, Asset, UserAsset
 
 load_dotenv()
 
-portfolio_tracker = Blueprint('portfolio_tracker', __name__)
+portfolio_tracker_bp = Blueprint('portfolio_tracker', __name__)
 
 apiIDs = {'the graph':'the-graph', 'fetch.ai':'fetch-ai'}
 
@@ -91,7 +91,7 @@ def generate_acc_stats(user_assets):
 
 # Routes
 
-@portfolio_tracker.route('/portfoliotracker')
+@portfolio_tracker_bp.route('/portfoliotracker')
 @login_required
 def portfoliotracker():
     if current_user.is_authenticated:
@@ -103,7 +103,7 @@ def portfoliotracker():
         return render_template('PTdemo_prompt.html')
 
 
-@portfolio_tracker.route('/add_asset', methods=['POST'])
+@portfolio_tracker_bp.route('/add_asset', methods=['POST'])
 @login_required
 def add_asset():
     name = request.form['name']
@@ -144,7 +144,7 @@ def add_asset():
     flash('Asset added successfully!', 'success')
     return redirect(url_for('portfolio_tracker.portfoliotracker'))
 
-@portfolio_tracker.route('/update_asset', methods=['POST'])
+@portfolio_tracker_bp.route('/update_asset', methods=['POST'])
 @login_required
 def update_asset():
     # Retrieve form data
@@ -180,7 +180,7 @@ def update_asset():
 
     return redirect(url_for('portfolio_tracker.portfoliotracker'))
 
-@portfolio_tracker.route('/remove_asset', methods=['POST'])
+@portfolio_tracker_bp.route('/remove_asset', methods=['POST'])
 @login_required
 def remove_asset():
     asset_id = request.form['asset_id']  # Get the asset ID from the form
