@@ -8,4 +8,17 @@
 
 {% block content %}
     <h1>Azure AI Demos</h1>
+    <h3>Text Translation</h3>
+    <div class="modal-body">
+        <form action="{{  url_for('azure_demos.translate')  }}" method="POST">
+            <label for="input">Text: </label>
+            <input type="text" class="form-control" id="input" name="input" required>
+            <label for="language">Language: </label>
+            <input type="text" class="form-control" id="language" name="language" required>
+            <button type="submit" class="btn btn-primary">Translate</button>
+            {% if text %}
+                {{ text }}
+            {% endif %}
+        </form>
+    </div>
 {% endblock %}
